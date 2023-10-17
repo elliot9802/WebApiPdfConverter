@@ -17,9 +17,15 @@ namespace AppPdfConverterWApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("convertUrl")]
-        public IActionResult ConvertUrlToPdf([FromBody] string url)
+        public class UrlRequest
         {
+            public string Url { get; set; }
+        }
+
+        [HttpPost("convertUrl")]
+        public IActionResult ConvertUrlToPdf([FromBody] UrlRequest request)
+        {
+            string url = request.Url;
             try
             {
                 if (!url.StartsWith("http://") && !url.StartsWith("https://"))
@@ -66,7 +72,14 @@ namespace AppPdfConverterWApi.Controllers
             {
                 if (htmlFile == null || htmlFile.Length == 0)
                 {
+                    _logger.LogWarning("HTML file missing or empty.");
                     return BadRequest("Please provide an HTML file.");
+                }
+
+                if (Path.GetExtension(htmlFile.FileName).ToLower() != ".html")
+                {
+                    _logger.LogWarning("Uploaded file is not an HTML file.");
+                    return BadRequest("Please provide a valid HTML file.");
                 }
 
                 // Generate a unique output file path for the PDF

@@ -1,12 +1,23 @@
 ﻿using System;
 using System.IO;
 using ExpertPdf.HtmlToPdf;
+using Microsoft.Extensions.Logging;
 namespace Services
 {
     public class ExpertPdfConvertService : IPdfConvertService
     {
+        private readonly ILogger<ExpertPdfConvertService> _logger;
+
+        public ExpertPdfConvertService(ILogger<ExpertPdfConvertService> logger)
+        {
+            _logger = logger;
+        }
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
         {
+            if (string.IsNullOrWhiteSpace(htmlContent))
+            {
+                _logger.LogError("Html Content is empty or null.");
+            }
             PdfConverter pdfConverter = CreatePdfConverter();
 
             try
