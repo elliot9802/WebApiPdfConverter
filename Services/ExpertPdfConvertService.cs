@@ -11,7 +11,7 @@ namespace Services
 
             try
             {
-                byte[] pdfBytes = pdfConverter.GetPdfBytesFromHtmlFile(htmlContent);
+                byte[] pdfBytes = pdfConverter.GetPdfBytesFromHtmlString(htmlContent);
                 File.WriteAllBytes(outputPath, pdfBytes);
             }
             catch (Exception)

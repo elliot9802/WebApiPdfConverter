@@ -10,11 +10,11 @@ namespace AppConsole
         private const string FileExtension = ".pdf";
 
         // Dependency injection can be done here
-        private static IPdfConvertService? _pdfService;
+        private static IPdfConvertService _pdfService;
 
         static void Main(string[] args)
         {
-            string htmlContent = File.ReadAllText(@"htmlfilepath");
+            string htmlContent = File.ReadAllText(@"C:\Users\viesed\OneDrive - Vitecsoftware Group AB\Desktop\HTMLforConverter\HTMLtoPDFConverter-HTMLTemplate\PDFConverter.html");
             string urlContent = @"https://messagequeue.actorsmartbook.se/Templates/ticket.aspx?orderid=3545624&uid=411ffdec-dcbc-491f-a629-8939d26dd031";
 
             // Choose which service to use
