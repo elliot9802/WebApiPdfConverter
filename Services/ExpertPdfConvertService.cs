@@ -4,48 +4,30 @@ using ExpertPdf.HtmlToPdf;
 using Microsoft.Extensions.Logging;
 namespace Services
 {
-    public class ExpertPdfConvertService : IPdfConvertService
+    public class ExpertPdfConvertService : IPdfConverterUtility
     {
         private readonly ILogger<ExpertPdfConvertService> _logger;
-
+        private readonly PdfConverter _pdfConverter;
         public ExpertPdfConvertService(ILogger<ExpertPdfConvertService> logger)
         {
             _logger = logger;
+            _pdfConverter = CreatePdfConverter();
         }
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
         {
             if (string.IsNullOrWhiteSpace(htmlContent))
             {
                 _logger.LogError("Html Content is empty or null.");
+                throw new ArgumentException("Html Content cannot be null or empty.");
             }
-            PdfConverter pdfConverter = CreatePdfConverter();
-
-            try
-            {
-                byte[] pdfBytes = pdfConverter.GetPdfBytesFromHtmlString(htmlContent);
+                byte[] pdfBytes = _pdfConverter.GetPdfBytesFromHtmlString(htmlContent);
                 File.WriteAllBytes(outputPath, pdfBytes);
-            }
-            catch (Exception)
-            {
-                // Throw the exception so it can be caught and logged/handled at the caller.
-                throw;
-            }
         }
 
         public void ConvertUrlToPdf(string urlContent, string outputPath)
         {
-            PdfConverter pdfConverter = CreatePdfConverter();
-
-            try
-            {
-                byte[] pdfBytes = pdfConverter.GetPdfBytesFromUrl(urlContent);
+                byte[] pdfBytes = _pdfConverter.GetPdfBytesFromUrl(urlContent);
                 File.WriteAllBytes(outputPath, pdfBytes);
-            }
-            catch (Exception)
-            {
-                // Throw the exception so it can be caught and logged/handled at the caller.
-                throw;
-            }
         }
 
         private PdfConverter CreatePdfConverter()

@@ -4,7 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddTransient<IPdfConvertService, ExpertPdfConvertService>();
+builder.Services.AddTransient<IPdfConverterUtility, ExpertPdfConvertService>();
+builder.Services.AddTransient<IFileService, FileService>();
+builder.Services.AddTransient<IPdfConversionService, PdfConversionService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();

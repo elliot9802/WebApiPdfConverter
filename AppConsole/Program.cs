@@ -10,7 +10,7 @@ namespace AppConsole
         private const string FileExtension = ".pdf";
 
         // Dependency injection can be done here
-        private static IPdfConvertService _pdfService;
+        private static IPdfConverterUtility _pdfService;
 
         static void Main(string[] args)
         {

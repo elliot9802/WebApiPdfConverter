@@ -1,6 +1,6 @@
 ﻿namespace Services
 {
-    public interface IPdfConvertService
+    public interface IPdfConverterUtility
     {
         void ConvertHtmlToPdf(string htmlContent, string outputPath);
         void ConvertUrlToPdf(string urlContent, string outputPath);
