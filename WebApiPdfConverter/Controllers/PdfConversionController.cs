@@ -5,6 +5,9 @@ using Services;
 
 namespace AppPdfConverterWApi.Controllers
 {
+    /// <summary>
+    /// Controller responsible for handling PDF conversion requests.
+    /// </summary>
     [Route("api/pdf")]
     [ApiController]
     public class PdfConversionController : ControllerBase

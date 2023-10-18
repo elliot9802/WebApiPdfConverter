@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Services
 {
+    /// <summary>
+    /// Defines functionalities related to PDF conversion operations.
+    /// </summary>
     public interface IPdfConversionService
     {
-
          bool IsValidUrl(string url);
 
         public byte[] ConvertHtmlContentToPdfBytes(string htmlContent);

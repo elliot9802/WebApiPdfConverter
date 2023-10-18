@@ -1,20 +1,20 @@
 ﻿namespace Services
 {
+    /// <summary>
+    /// Provides functionalities related to file operations.
+    /// </summary>
     public interface IFileService
     {
-        bool Exists(string path);
         void Delete(string path);
         void WriteAllBytes(string path, byte[] bytes);
         byte[] ReadAllBytes(string path);
     }
 
+    /// <summary>
+    /// Service responsible for file operations.
+    /// </summary>
     public class FileService : IFileService
     {
-        public bool Exists(string path)
-        {
-            return File.Exists(path);
-        }
-
         public void Delete(string path)
         {
             File.Delete(path);

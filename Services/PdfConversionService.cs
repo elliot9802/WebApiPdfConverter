@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Services
 {
+    /// <summary>
+    /// Provides functionalities for converting URLs and HTML content to PDF.
+    /// </summary>
     public class PdfConversionService : IPdfConversionService
     {
         private readonly IPdfConverterUtility _pdfUtility;
@@ -18,6 +21,11 @@ namespace Services
             _fileService = fileService;
         }
 
+        /// <summary>
+        /// Validate if the provided string is a valid URL.
+        /// </summary>
+        /// <param name="url">The string to validate</param>
+        /// <returns>True if the string is a valid URL, otherwise false.</returns>
         public bool IsValidUrl(string url)
         {
             return Uri.TryCreate(url, UriKind.Absolute, out Uri? uriResult) &&

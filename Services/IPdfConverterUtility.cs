@@ -1,5 +1,8 @@
 ﻿namespace Services
 {
+    /// <summary>
+    /// Defines functionalities for PDF conversion.
+    /// </summary>
     public interface IPdfConverterUtility
     {
         void ConvertHtmlToPdf(string htmlContent, string outputPath);
