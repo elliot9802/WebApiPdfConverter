@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppPdfConverterWApi", "WebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{145124B9-D041-4E77-86AD-1B88B6C12469}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppConsole", "AppConsole\AppConsole.csproj", "{AB8F6ECC-AE40-4D0E-BA2E-23280870D1FB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{C5A5AF2E-23FA-4BF2-9346-FF60670A0F8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{C5A5AF2E-23FA-4BF2-9346-FF60670A0F8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{145124B9-D041-4E77-86AD-1B88B6C12469}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{145124B9-D041-4E77-86AD-1B88B6C12469}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{145124B9-D041-4E77-86AD-1B88B6C12469}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB8F6ECC-AE40-4D0E-BA2E-23280870D1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB8F6ECC-AE40-4D0E-BA2E-23280870D1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB8F6ECC-AE40-4D0E-BA2E-23280870D1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB8F6ECC-AE40-4D0E-BA2E-23280870D1FB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C5A5AF2E-23FA-4BF2-9346-FF60670A0F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C5A5AF2E-23FA-4BF2-9346-FF60670A0F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5A5AF2E-23FA-4BF2-9346-FF60670A0F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
