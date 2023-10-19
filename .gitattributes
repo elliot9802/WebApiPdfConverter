@@ -3,6 +3,14 @@
 ###############################################################################
 * text=auto
 
+# Linguist language overrides
+*.js linguist-detectable=false
+*.cs linguist-language=C#
+*.aspx linguist-language=ASP
+*.aspx.cs linguist-language=C#
+*.ascx linguist-language=ASP
+*.ascx.cs linguist-language=C#
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
 
-namespace PdfConverterWApi.Controllers
+namespace AppPdfConverterWApi.Controllers
 {
     /// <summary>
     /// Controller responsible for handling PDF conversion requests.

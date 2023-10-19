@@ -57,7 +57,7 @@ namespace WebFormsAPIWebbtest
             Response.ContentType = "application/pdf";
             Response.AppendHeader("Content-Disposition", "attachment; filename=converted.pdf");
             Response.TransmitFile(pdfPath);
-            //Response.End();
+
             HttpContext.Current.ApplicationInstance.CompleteRequest();
         }
     }
