@@ -12,7 +12,7 @@
 
 ## Översikt
 WebApiPdfConverter är en webb-API som låter användare konvertera webbplatser till PDF-filer. 
-API:n erbjuder en enkel slutpunkt för att skicka en webbadress (URL) och få tillbaka en PDF-representation av webbsidan.
+API:n erbjuder enkla slutpunkter för att skicka en webbadress (URL) eller en HTML-fil och få tillbaka en PDF-representation.
 
 ## Installation
 För en framgångsrik installation av WebApiPdfConverter, 
@@ -44,18 +44,50 @@ För att konvertera en webbadress (URL) till PDF, använd följande slutpunkt:
 }
 ```
 **Svar:**
-Om det är framgångsrikt får du tillbaka en PDF-representation av webbsidan som en byte-stream.
+En PDF-fil som representerar den angivna webbadressens innehåll.
+
+### Konvertera HTML-fil till PDF
+För att konvertera en uppladdad HTML-fil till PDF, använd följande slutpunkt:
+
+- **Metod:** POST
+- **Slutpunkt:** `/api/pdf/convertHtmlFile`
+
+**Payload:** 
+En `multipart/form-data`-begäran med en filparameter `htmlFile` som innehåller HTML-filen som ska konverteras.
+**Svar:** En PDF-fil som representerar innehållet i den uppladdade HTML-filen.
+
+### Exempel
+
+**Konvertera URL till PDF:**
+```bash
+curl -X POST 
+     -H "Content-Type: application/json" 
+     -d '{"Url": "http://example.com"}' 
+     https://ApiUrl/api/pdf/convertUrl
+```
 
 ### Exempel
 Använd följande curl-kommando för att testa API:t:
 ```bash
-curl -X POST "https://localhost:7099/api/pdf/convertUrl" \
+curl -X POST "https://ApiUrl/api/pdf/convertUrl" \
      -H "Content-Type: application/json" \
      -d '{"Url": "https://www.example.com"}' \
      --output converted.pdf
 ```
 Detta kommando kommer att skicka en förfrågan till API:t för att konvertera "https://www.example.com" till PDF och spara den som "converted.pdf".
 
-### Felhantering
-Om något går fel när du försöker konvertera en URL till PDF, kommer API:t att svara med ett relevant felmeddelande som hjälper dig att förstå problemet.
+**Konvertera HTML-fil till PDF:**
+```bash
+curl -X POST 
+     -H "Content-Type: multipart/form-data" 
+     -F "htmlFile=@path/to/your/file.html" 
+     https://ApiUrl/api/pdf/convertHtmlFile
+```
 
+### Felhantering
+API:t returnerar passande HTTP-statuskoder beroende på om begäran lyckades eller misslyckades. 
+Vid misslyckade begäranden skickas även ett felmeddelande för att ge mer information om orsaken till felet.
+
+- 400 Bad Request: Detta indikerar oftast att något i begärandet inte var rätt, t.ex. en ogiltig URL eller en icke-HTML-fil som skickades.
+- 500 Internal Server Error: Detta antyder att något gick fel på servern. Ytterligare detaljer kan finnas i svaret.
+För bästa praxis, se till att hantera dessa fel på klientens sida för att ge användarna feedback och vidta lämpliga åtgärder.

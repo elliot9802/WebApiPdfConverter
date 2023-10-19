@@ -12,7 +12,7 @@ namespace AppPdfConverterWApi.Controllers
     [ApiController]
     public class PdfConversionController : ControllerBase
     {
-        private readonly ILogger <PdfConversionController> _logger;
+        private readonly ILogger<PdfConversionController> _logger;
         private readonly IPdfConversionService _pdfService;
 
         public PdfConversionController(IPdfConversionService pdfService, ILogger<PdfConversionController> logger)

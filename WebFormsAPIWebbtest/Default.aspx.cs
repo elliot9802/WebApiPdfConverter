@@ -61,5 +61,4 @@ namespace WebFormsAPIWebbtest
             HttpContext.Current.ApplicationInstance.CompleteRequest();
         }
     }
-
 }
