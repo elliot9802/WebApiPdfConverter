@@ -6,27 +6,22 @@ using Microsoft.Extensions.Logging;
 namespace Services
 {
     /// <summary>
-    /// PDF conversion service using the ExpertPdf library
+    /// Service class responsible for converting HTML content and URLs to PDF format.
+    /// This implementation leverages the ExpertPdf library, specifically using its PdfConverter class.
+    /// The PdfConverter is initialized with predefined settings suitable for the PDF conversion tasks.
     /// </summary>
     public class ExpertPdfConvertService : IPdfConverterUtility
     {
-        private readonly ILogger<ExpertPdfConvertService> _logger;
-        private readonly PdfConverter _pdfConverter;
         private readonly IFileService _fileService;
+        private readonly PdfConverter _pdfConverter;
 
-        public ExpertPdfConvertService(ILogger<ExpertPdfConvertService> logger, IFileService fileService)
+        public ExpertPdfConvertService(IFileService fileService)
         {
-            _logger = logger;
-            _pdfConverter = CreatePdfConverter();
             _fileService = fileService;
+            _pdfConverter = CreatePdfConverter();
         }
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
         {
-            if (string.IsNullOrWhiteSpace(htmlContent))
-            {
-                _logger.LogError("Html Content is empty or null.");
-                throw new ArgumentException("Html Content cannot be null or empty.");
-            }
                 byte[] pdfBytes = _pdfConverter.GetPdfBytesFromHtmlString(htmlContent);
                 _fileService.WriteAllBytes(outputPath, pdfBytes);
         }
@@ -37,6 +32,10 @@ namespace Services
                 _fileService.WriteAllBytes(outputPath, pdfBytes);
         }
 
+        /// <summary>
+        /// Creates an instance of PdfConverter with predefined settings.
+        /// </summary>
+        /// <returns>Configured instance of PdfConverter.</returns>
         private PdfConverter CreatePdfConverter()
         {
             PdfConverter pdfConverter = new PdfConverter
