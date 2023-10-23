@@ -12,13 +12,13 @@ namespace Services
     /// </summary>
     public class PdfConversionService : IPdfConversionService
     {
-        private readonly IPdfConverterUtility _pdfUtility;
         private readonly IFileService _fileService;
+        private readonly IPdfConverterUtility _pdfUtility;
 
-        public PdfConversionService(IPdfConverterUtility pdfUtility, IFileService fileService)
+        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility)
         {
-            _pdfUtility = pdfUtility;
             _fileService = fileService;
+            _pdfUtility = pdfUtility;
         }
 
         /// <summary>

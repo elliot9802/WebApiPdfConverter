@@ -28,11 +28,15 @@ namespace AppPdfConverterWApi.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.LogWarning("Invalid model state during URL to PDF conversion.");
                     return BadRequest(ModelState);
                 }
 
                 if (!_pdfService.IsValidUrl(request.Url))
+                {
+                    _logger.LogWarning($"Invalid URL format provided: {request.Url}.");
                     return BadRequest("Invalid URL format.");
+                }
 
                 byte[] pdfBytes = _pdfService.ConvertUrlToPdfBytes(request.Url);
                 return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
@@ -57,7 +61,7 @@ namespace AppPdfConverterWApi.Controllers
 
                 if (Path.GetExtension(htmlFile.FileName).ToLower() != ".html")
                 {
-                    _logger.LogWarning("Uploaded file is not an HTML file.");
+                    _logger.LogWarning($"Uploaded file '{htmlFile.FileName}' is not an HTML file.");
                     return BadRequest("Please provide a valid HTML file.");
                 }
 
