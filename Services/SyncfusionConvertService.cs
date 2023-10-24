@@ -13,18 +13,27 @@ namespace Services
         public SyncfusionConvertService(IFileService fileService)
         {
             _fileService = fileService;
-            _htmlToPdfConverter = new HtmlToPdfConverter(HtmlRenderingEngine.Blink);
-
-            var converterSettings = new BlinkConverterSettings
+            _htmlToPdfConverter = new HtmlToPdfConverter(HtmlRenderingEngine.Blink)
             {
-                ViewPortSize = new Syncfusion.Drawing.Size(1024, 0),
-                Margin = new PdfMargins
+                ConverterSettings = new BlinkConverterSettings()
                 {
-                    All = 0
+                    ViewPortSize = new Syncfusion.Drawing.Size(1024, 0),
+                    Margin = new PdfMargins
+                    {
+                        All = 0
+                    }
                 }
             };
+        }
 
-            _htmlToPdfConverter.ConverterSettings = converterSettings;
+        private void ConvertAndSavePdf(string inputData, string outputPath)
+        {
+            PdfDocument pdfDocument = _htmlToPdfConverter.Convert(inputData);
+            using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+            {
+                pdfDocument.Save(stream);
+            }
+            pdfDocument.Close(true);
         }
 
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
@@ -34,12 +43,7 @@ namespace Services
 
             try
             {
-                PdfDocument pdfDocument = _htmlToPdfConverter.Convert(tempHtmlPath);
-                using (FileStream stream = new FileStream(outputPath, FileMode.Create))
-                {
-                    pdfDocument.Save(stream);
-                }
-                pdfDocument.Close(true);
+                ConvertAndSavePdf(outputPath, tempHtmlPath);
             }
             finally
             {
@@ -49,12 +53,7 @@ namespace Services
 
         public void ConvertUrlToPdf(string urlContent, string outputPath)
         {
-            PdfDocument pdfDocument = _htmlToPdfConverter.Convert(urlContent);
-            using (FileStream stream = new FileStream(outputPath, FileMode.Create))
-            {
-                pdfDocument.Save(stream);
-            }
-            pdfDocument.Close(true);
+            ConvertAndSavePdf(outputPath, urlContent);
         }
     }
 }
