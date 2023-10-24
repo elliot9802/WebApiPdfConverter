@@ -1,7 +1,7 @@
 ﻿using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
-using System.IO;
+using System.Text;
 
 namespace Services
 {
@@ -29,12 +29,22 @@ namespace Services
 
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
         {
-            PdfDocument pdfDocument = _htmlToPdfConverter.Convert(htmlContent);
-            using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+            string tempHtmlPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".html");
+            _fileService.WriteAllBytes(tempHtmlPath, Encoding.UTF8.GetBytes(htmlContent));
+
+            try
             {
-                pdfDocument.Save(stream);
+                PdfDocument pdfDocument = _htmlToPdfConverter.Convert(tempHtmlPath);
+                using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+                {
+                    pdfDocument.Save(stream);
+                }
+                pdfDocument.Close(true);
             }
-            pdfDocument.Close(true);
+            finally
+            {
+                _fileService.Delete(tempHtmlPath);
+            }
         }
 
         public void ConvertUrlToPdf(string urlContent, string outputPath)

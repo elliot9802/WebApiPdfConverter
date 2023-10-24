@@ -15,6 +15,15 @@ namespace WebFormsAPIWebbtest
     {
 
         /// <summary>
+        /// lblUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUrl;
+
+        /// <summary>
         /// txtUrl control.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,33 @@ namespace WebFormsAPIWebbtest
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnConvertUrl;
+
+        /// <summary>
+        /// lblHtml control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHtml;
+
+        /// <summary>
+        /// htmlFileUpload control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload htmlFileUpload;
+
+        /// <summary>
+        /// btnConvertHtml control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnConvertHtml;
 
         /// <summary>
         /// litMessage control.

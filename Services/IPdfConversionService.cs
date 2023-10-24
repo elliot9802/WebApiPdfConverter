@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Services
+﻿namespace Services
 {
     /// <summary>
     /// Defines functionalities related to PDF conversion operations.
     /// </summary>
     public interface IPdfConversionService
     {
-         bool IsValidUrl(string url);
-
+        bool IsValidUrl(string url);
+        string GetTemporaryPdfFilePath();
         public byte[] ConvertHtmlContentToPdfBytes(string htmlContent);
         public byte[] ConvertUrlToPdfBytes(string url);
     }
