@@ -7,9 +7,9 @@ namespace Services
     /// </summary>
     public interface IFileService
     {
-        void Delete(string path);
-        void WriteAllBytes(string path, byte[] bytes);
-        byte[] ReadAllBytes(string path);
+        Task DeleteAsync(string path);
+        Task WriteAllBytesAsync(string path, byte[] bytes);
+        Task<byte[]> ReadAllBytesAsync(string path);
         bool Exists(string path);
     }
 
@@ -24,19 +24,20 @@ namespace Services
             _logger = logger;
         }
 
-        public void Delete(string path)
+        public async Task DeleteAsync(string path)
         {
             try
             {
                 _logger.LogInformation($"Deleting file at path: {path}");
-                File.Delete(path);
+                await Task.Run(() => File.Delete(path));
             }
             catch (IOException ex)
             {
                 _logger.LogError(ex, $"Failed to delete file at path: {path}");
             }
         }
-        public void WriteAllBytes(string path, byte[] bytes)
+
+        public async Task WriteAllBytesAsync(string path, byte[] bytes)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace Services
                 {
                     Directory.CreateDirectory(directory);
                 }
-                File.WriteAllBytes(path, bytes);
+                await File.WriteAllBytesAsync(path, bytes);
             }
             catch (Exception ex)
             {
@@ -53,9 +54,10 @@ namespace Services
                 throw;  // re-throw the exception or handle it as necessary
             }
         }
-        public byte[] ReadAllBytes(string path)
+
+        public async Task<byte[]> ReadAllBytesAsync(string path)
         {
-            return File.ReadAllBytes(path);
+            return await File.ReadAllBytesAsync(path);
         }
 
         public bool Exists(string path)

@@ -22,7 +22,7 @@ namespace AppPdfConverterWApi.Controllers
         }
 
         [HttpPost("convertUrl")]
-        public IActionResult ConvertUrlToPdf([FromBody] UrlRequest request)
+        public async Task<IActionResult> ConvertUrlToPdf([FromBody] UrlRequest request)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace AppPdfConverterWApi.Controllers
                     return BadRequest("Invalid URL format.");
                 }
 
-                byte[] pdfBytes = _pdfService.ConvertUrlToPdfBytes(request.Url);
+                byte[] pdfBytes = await _pdfService.ConvertUrlToPdfBytesAsync(request.Url);
                 return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
             }
             catch (PdfConversionException pce)
@@ -54,7 +54,7 @@ namespace AppPdfConverterWApi.Controllers
         }
 
         [HttpPost("convertHtmlFile")]
-        public IActionResult ConvertHtmlFileToPdf(IFormFile htmlFile)
+        public async Task<IActionResult> ConvertHtmlFileToPdf(IFormFile htmlFile)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace AppPdfConverterWApi.Controllers
                 {
                     var htmlContent = reader.ReadToEnd();
 
-                    byte[] pdfBytes = _pdfService.ConvertHtmlContentToPdfBytes(htmlContent);
+                    byte[] pdfBytes = await _pdfService.ConvertHtmlContentToPdfBytesAsync(htmlContent);
                     return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
                 }
             }

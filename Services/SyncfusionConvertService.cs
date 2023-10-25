@@ -2,6 +2,7 @@
 using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.HtmlToPdf;
 using System.Text;
 
 namespace Services
@@ -18,6 +19,7 @@ namespace Services
             _logger = logger;
             _htmlToPdfConverter = new HtmlToPdfConverter(HtmlRenderingEngine.Blink)
             {
+                ReuseBrowserProcess = true,
                 ConverterSettings = new BlinkConverterSettings()
                 {
                     ViewPortSize = new Syncfusion.Drawing.Size(1024, 0),
@@ -29,16 +31,19 @@ namespace Services
             };
         }
 
-        private void ConvertAndSavePdf(string inputData, string outputPath)
+        private async Task ConvertAndSavePdfAsync(string inputData, string outputPath)
         {
             try
             {
                 _logger.LogInformation($"Starting conversion of input data to PDF. Output path: {outputPath}");
                 PdfDocument pdfDocument = _htmlToPdfConverter.Convert(inputData);
-                using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+                await Task.Run(() =>
                 {
-                    pdfDocument.Save(stream);
-                }
+                    using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+                    {
+                        pdfDocument.Save(stream);
+                    }
+                });
                 pdfDocument.Close(true);
                 _logger.LogInformation($"Conversion and saving of PDF completed. Output path: {outputPath}");
             }
@@ -49,15 +54,15 @@ namespace Services
                 throw new PdfConversionException($"{errorMessage}. Exception: {ex.Message}", ex);
             }
         }
-        public void ConvertHtmlToPdf(string htmlContent, string outputPath)
+        public async Task ConvertHtmlToPdfAsync(string htmlContent, string outputPath)
         {
             string tempHtmlPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".html");
-            _fileService.WriteAllBytes(tempHtmlPath, Encoding.UTF8.GetBytes(htmlContent));
+            await _fileService.WriteAllBytesAsync(tempHtmlPath, Encoding.UTF8.GetBytes(htmlContent));
 
             try
             {
                 _logger.LogInformation($"Converting HTML to PDF. Temporary HTML path: {tempHtmlPath}, Output path: {outputPath}");
-                ConvertAndSavePdf(tempHtmlPath, outputPath);
+                await ConvertAndSavePdfAsync(tempHtmlPath, outputPath);
             }
             catch (Exception ex)
             {
@@ -69,17 +74,17 @@ namespace Services
             {
                 if (_fileService.Exists(tempHtmlPath))
                 {
-                    _fileService.Delete(tempHtmlPath);
+                    await _fileService.DeleteAsync(tempHtmlPath);
                 }
             }
         }
 
-        public void ConvertUrlToPdf(string urlContent, string outputPath)
+        public async Task ConvertUrlToPdfAsync(string urlContent, string outputPath)
         {
             try
             {
                 _logger.LogInformation($"Converting URL content to PDF. URL: {urlContent}, Output path: {outputPath}");
-                ConvertAndSavePdf(urlContent, outputPath);
+                await ConvertAndSavePdfAsync(urlContent, outputPath);
 
             }
             catch (Exception ex)

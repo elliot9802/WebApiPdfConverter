@@ -7,7 +7,7 @@
     {
         bool IsValidUrl(string url);
         string GetTemporaryPdfFilePath();
-        public byte[] ConvertHtmlContentToPdfBytes(string htmlContent);
-        public byte[] ConvertUrlToPdfBytes(string url);
+        Task <byte[]> ConvertHtmlContentToPdfBytesAsync(string htmlContent);
+        Task <byte[]> ConvertUrlToPdfBytesAsync(string url);
     }
 }

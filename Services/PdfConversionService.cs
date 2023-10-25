@@ -36,18 +36,18 @@ namespace Services
             return Path.Combine(tempDirectory, fileName);
         }
 
-        private byte[] ConvertToPdfBytes(Action<string> conversionAction)
+        private async Task<byte[]> ConvertToPdfBytesAsync(Func<string, Task> conversionAction)
         {
             string outputPath = GetTemporaryPdfFilePath();
             try
             {
                 _logger.LogInformation($"Starting PDF conversion. Temporary output path: {outputPath}");
-                conversionAction(outputPath);
+                await conversionAction(outputPath);
                 if (!_fileService.Exists(outputPath))
                 {
                     throw new FileNotFoundException("Pdf file not found after conversion", outputPath);
                 }
-                byte[] pdfBytes = _fileService.ReadAllBytes(outputPath);
+                byte[] pdfBytes = await _fileService.ReadAllBytesAsync(outputPath);
                 _logger.LogInformation($"Pdf conversion completed. Temporary output path: {outputPath}");
                 return pdfBytes;
             }
@@ -61,19 +61,19 @@ namespace Services
             {
                 if (_fileService.Exists(outputPath))
                 {
-                    _fileService.Delete(outputPath);
+                    await _fileService.DeleteAsync(outputPath);
                 }
             }
         }
 
-        public byte[] ConvertHtmlContentToPdfBytes(string htmlContent)
+        public async Task<byte[]> ConvertHtmlContentToPdfBytesAsync(string htmlContent)
         {
-            return ConvertToPdfBytes(outputPath => _pdfUtility.ConvertHtmlToPdf(htmlContent, outputPath));
+            return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertHtmlToPdfAsync(htmlContent, outputPath));
         }
 
-        public byte[] ConvertUrlToPdfBytes(string url)
+        public async Task<byte[]> ConvertUrlToPdfBytesAsync(string url)
         {
-            return ConvertToPdfBytes(outputPath => _pdfUtility.ConvertUrlToPdf(url, outputPath));
+            return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertUrlToPdfAsync(url, outputPath));
         }
     }
 }
