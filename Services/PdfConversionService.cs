@@ -1,4 +1,6 @@
-﻿namespace Services
+﻿using Microsoft.Extensions.Logging;
+
+namespace Services
 {
     /// <summary>
     /// Provides functionalities for converting URLs and HTML content to PDF.
@@ -7,11 +9,13 @@
     {
         private readonly IFileService _fileService;
         private readonly IPdfConverterUtility _pdfUtility;
+        private readonly ILogger<PdfConversionService> _logger;
 
-        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility)
+        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility, ILogger<PdfConversionService> logger)
         {
             _fileService = fileService;
             _pdfUtility = pdfUtility;
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,19 +32,38 @@
         public string GetTemporaryPdfFilePath()
         {
             string tempDirectory = Path.GetTempPath();
-            string fileName = Guid.NewGuid().ToString() + "pdf";
+            string fileName = Guid.NewGuid().ToString() + ".pdf";
             return Path.Combine(tempDirectory, fileName);
         }
 
         private byte[] ConvertToPdfBytes(Action<string> conversionAction)
         {
             string outputPath = GetTemporaryPdfFilePath();
-            conversionAction(outputPath);
-
-            byte[] pdfBytes = _fileService.ReadAllBytes(outputPath);
-            _fileService.Delete(outputPath);
-
-            return pdfBytes;
+            try
+            {
+                _logger.LogInformation($"Starting PDF conversion. Temporary output path: {outputPath}");
+                conversionAction(outputPath);
+                if (!_fileService.Exists(outputPath))
+                {
+                    throw new FileNotFoundException("Pdf file not found after conversion", outputPath);
+                }
+                byte[] pdfBytes = _fileService.ReadAllBytes(outputPath);
+                _logger.LogInformation($"Pdf conversion completed. Temporary output path: {outputPath}");
+                return pdfBytes;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"Failed to convert to PDF. Temporary output path: {outputPath}";
+                _logger.LogError(errorMessage, ex);
+                throw new PdfConversionException($"{errorMessage}. Exception: {ex.Message}", ex);
+            }
+            finally
+            {
+                if (_fileService.Exists(outputPath))
+                {
+                    _fileService.Delete(outputPath);
+                }
+            }
         }
 
         public byte[] ConvertHtmlContentToPdfBytes(string htmlContent)

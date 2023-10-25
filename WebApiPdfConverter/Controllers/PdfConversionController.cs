@@ -41,10 +41,15 @@ namespace AppPdfConverterWApi.Controllers
                 byte[] pdfBytes = _pdfService.ConvertUrlToPdfBytes(request.Url);
                 return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
             }
+            catch (PdfConversionException pce)
+            {
+                _logger.LogError(pce, "Pdf Conversion failed due to a PdfConversionException");
+                return BadRequest($"Pdf Conversion failed: {pce.Message}");
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "PDF Conversion failed");
-                return BadRequest($"PDF Conversion failed: {ex.Message}");
+                _logger.LogError(ex, "PDF Conversion failed due to an unknown error");
+                return StatusCode(500, "An unexpected error occured.");
             }
         }
 
@@ -74,10 +79,15 @@ namespace AppPdfConverterWApi.Controllers
                     return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
                 }
             }
+            catch (PdfConversionException pce)
+            {
+                _logger.LogError(pce, "Pdf Conversion failed due to a PdfConversionException");
+                return BadRequest($"Pdf Conversion failed: {pce.Message}");
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "PDF Conversion failed");
-                return BadRequest($"PDF Conversion failed: {ex.Message}");
+                _logger.LogError(ex, "PDF Conversion failed due to an unknown error");
+                return StatusCode(500, "An unexpected error occured.");
             }
         }
 

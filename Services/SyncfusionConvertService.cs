@@ -1,4 +1,5 @@
-﻿using Syncfusion.HtmlConverter;
+﻿using Microsoft.Extensions.Logging;
+using Syncfusion.HtmlConverter;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using System.Text;
@@ -9,10 +10,12 @@ namespace Services
     {
         private readonly IFileService _fileService;
         private readonly HtmlToPdfConverter _htmlToPdfConverter;
+        private readonly ILogger<SyncfusionConvertService> _logger;
 
-        public SyncfusionConvertService(IFileService fileService)
+        public SyncfusionConvertService(IFileService fileService, ILogger<SyncfusionConvertService> logger)
         {
             _fileService = fileService;
+            _logger = logger;
             _htmlToPdfConverter = new HtmlToPdfConverter(HtmlRenderingEngine.Blink)
             {
                 ConverterSettings = new BlinkConverterSettings()
@@ -28,14 +31,24 @@ namespace Services
 
         private void ConvertAndSavePdf(string inputData, string outputPath)
         {
-            PdfDocument pdfDocument = _htmlToPdfConverter.Convert(inputData);
-            using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+            try
             {
-                pdfDocument.Save(stream);
+                _logger.LogInformation($"Starting conversion of input data to PDF. Output path: {outputPath}");
+                PdfDocument pdfDocument = _htmlToPdfConverter.Convert(inputData);
+                using (FileStream stream = new FileStream(outputPath, FileMode.Create))
+                {
+                    pdfDocument.Save(stream);
+                }
+                pdfDocument.Close(true);
+                _logger.LogInformation($"Conversion and saving of PDF completed. Output path: {outputPath}");
             }
-            pdfDocument.Close(true);
+            catch (Exception ex)
+            {
+                var errorMessage = $"Failed to convert and save PDF. Input data: {inputData}, Output path: {outputPath}";
+                _logger.LogError(ex, errorMessage);
+                throw new PdfConversionException($"{errorMessage}. Exception: {ex.Message}", ex);
+            }
         }
-
         public void ConvertHtmlToPdf(string htmlContent, string outputPath)
         {
             string tempHtmlPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".html");
@@ -43,17 +56,45 @@ namespace Services
 
             try
             {
-                ConvertAndSavePdf(outputPath, tempHtmlPath);
+                _logger.LogInformation($"Converting HTML to PDF. Temporary HTML path: {tempHtmlPath}, Output path: {outputPath}");
+                ConvertAndSavePdf(tempHtmlPath, outputPath);
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"Failed to convert HTML file to PDF. Temporary output path: {outputPath}";
+                _logger.LogError(errorMessage, ex);
+                throw new PdfConversionException($"{errorMessage}. Exception: {ex.Message}", ex);
             }
             finally
             {
-                _fileService.Delete(tempHtmlPath);
+                if (_fileService.Exists(tempHtmlPath))
+                {
+                    _fileService.Delete(tempHtmlPath);
+                }
             }
         }
 
         public void ConvertUrlToPdf(string urlContent, string outputPath)
         {
-            ConvertAndSavePdf(outputPath, urlContent);
+            try
+            {
+                _logger.LogInformation($"Converting URL content to PDF. URL: {urlContent}, Output path: {outputPath}");
+                ConvertAndSavePdf(urlContent, outputPath);
+
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = $"Failed to convert URL content to PDF. URL: {urlContent}, Output path: {outputPath}";
+                _logger.LogError(ex, errorMessage);
+                throw new PdfConversionException($"{errorMessage}. Exception: {ex.Message}", ex);
+            }
+        }
+    }
+    public class PdfConversionException : Exception
+    {
+        public PdfConversionException(string message, Exception innerException)
+            : base(message, innerException)
+        {
         }
     }
 }
