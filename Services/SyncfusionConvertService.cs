@@ -90,11 +90,4 @@ namespace Services
             }
         }
     }
-    public class PdfConversionException : Exception
-    {
-        public PdfConversionException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
-    }
 }

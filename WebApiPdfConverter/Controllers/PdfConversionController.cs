@@ -90,6 +90,5 @@ namespace AppPdfConverterWApi.Controllers
                 return StatusCode(500, "An unexpected error occured.");
             }
         }
-
     }
 }
