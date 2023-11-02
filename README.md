@@ -7,7 +7,7 @@
    - [Steg-för-steg installation](#steg-för-steg-installation)
 3. [Användning](#användning)
    - [Konvertera URL till PDF](#konvertera-url-till-pdf)
-   - [Konvertera HTML till PDF](#konvertera-html-till-pdf)
+   - [Konvertera HTML till PDF](#konvertera-html-fil-till-pdf)
    - [Exempel](#exempel)
 4. [Felhantering](#felhantering)
 5. [Caching](#caching)
