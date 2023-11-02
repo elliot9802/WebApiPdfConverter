@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace Services
 {
@@ -10,12 +11,14 @@ namespace Services
         private readonly IFileService _fileService;
         private readonly IPdfConverterUtility _pdfUtility;
         private readonly ILogger<PdfConversionService> _logger;
+        private readonly IMemoryCache _cache;
 
-        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility, ILogger<PdfConversionService> logger)
+        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility, ILogger<PdfConversionService> logger, IMemoryCache cache)
         {
             _fileService = fileService;
             _pdfUtility = pdfUtility;
             _logger = logger;
+            _cache = cache;
         }
 
         /// <summary>
@@ -73,7 +76,11 @@ namespace Services
 
         public async Task<byte[]> ConvertUrlToPdfBytesAsync(string url)
         {
+            /*return await _cache.GetOrCreateAsync(url, async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);*/
             return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertUrlToPdfAsync(url, outputPath));
+            /*});*/
         }
     }
 }

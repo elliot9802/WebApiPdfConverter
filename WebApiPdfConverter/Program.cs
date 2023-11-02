@@ -2,9 +2,13 @@ using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var syncfusionLicenseKey = builder.Configuration["SyncfusionLicenseKey"];
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncfusionLicenseKey);
+
 // Add services to the container.
 builder.Services.AddLogging();
 builder.Services.AddControllers();
+//builder.Services.AddMemoryCache();
 builder.Services.AddTransient<IPdfConverterUtility, SyncfusionConvertService>();
 builder.Services.AddTransient<IFileService, FileService>();
 builder.Services.AddTransient<IPdfConversionService, PdfConversionService>();
@@ -12,13 +16,18 @@ builder.Services.AddTransient<IPdfConversionService, PdfConversionService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-#if DEBUG
 // Enable CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("VueAppPolicy", builder =>
+    options.AddPolicy("DefaultCorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:5173", "https://*.actorsmartbook.se", "https://*.actorsmartbook.no") 
+
+#if DEBUG
+        builder.WithOrigins("http://localhost:5173")
+#endif
+#if RELEASE
+        builder.WithOrigins("https://*.actorsmartbook.se", "https://*.actorsmartbook.no") 
+#endif
                .SetIsOriginAllowedToAllowWildcardSubdomains()
                .WithMethods("POST")
                .WithHeaders("Content-Type");
@@ -27,7 +36,6 @@ builder.Services.AddCors(options =>
 /* 
 CORS allows specific external origins access to your API via browsers. 
 */
-#endif
 
 var app = builder.Build();
 
@@ -42,10 +50,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-#if DEBUG
 // Use CORS middleware
-app.UseCors("VueAppPolicy");
-#endif
+app.UseCors("DefaultCorsPolicy");
 
 app.MapControllers();
 
