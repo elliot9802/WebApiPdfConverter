@@ -51,7 +51,6 @@ namespace Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Failed to write bytes to file at path: {path}");
-                throw;  // re-throw the exception or handle it as necessary
             }
         }
 
