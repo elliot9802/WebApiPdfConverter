@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("VueAppPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:5173") // "https://*.actorsmartbook.com")
+        builder.WithOrigins("http://localhost:5173", "https://*.actorsmartbook.se", "https://*.actorsmartbook.no") 
                .SetIsOriginAllowedToAllowWildcardSubdomains()
                .WithMethods("POST")
                .WithHeaders("Content-Type");
@@ -26,15 +26,17 @@ builder.Services.AddCors(options =>
 });
 /* 
 CORS allows specific external origins access to your API via browsers. 
-In our case, using AllowedHosts in appsettings.json to restrict access based on hostname is more suitable.
 */
 #endif
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 
