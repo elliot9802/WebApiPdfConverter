@@ -85,7 +85,6 @@ namespace Services
             {
                 _logger.LogInformation($"Converting URL content to PDF. URL: {urlContent}, Output path: {outputPath}");
                 await ConvertAndSavePdfAsync(urlContent, outputPath);
-
             }
             catch (Exception ex)
             {
