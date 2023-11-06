@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace Services
 {
@@ -11,14 +12,14 @@ namespace Services
         private readonly IFileService _fileService;
         private readonly IPdfConverterUtility _pdfUtility;
         private readonly ILogger<PdfConversionService> _logger;
-        private readonly IMemoryCache _cache;
+        //private readonly IMemoryCache _cache;
 
-        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility, ILogger<PdfConversionService> logger, IMemoryCache cache)
+        public PdfConversionService(IFileService fileService, IPdfConverterUtility pdfUtility, ILogger<PdfConversionService> logger/*, IMemoryCache cache*/)
         {
             _fileService = fileService;
             _pdfUtility = pdfUtility;
             _logger = logger;
-            _cache = cache;
+            //_cache = cache;
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Services
                 }
             }
         }
-
+       
         public async Task<byte[]> ConvertHtmlContentToPdfBytesAsync(string htmlContent)
         {
             return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertHtmlToPdfAsync(htmlContent, outputPath));
@@ -81,6 +82,11 @@ namespace Services
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);*/
             return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertUrlToPdfAsync(url, outputPath));
             /*});*/
+        }
+
+        public async Task<byte[]> CreateAndSavePdfAsync()
+        {
+            return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.CreatePdfAsync(outputPath));
         }
     }
 }

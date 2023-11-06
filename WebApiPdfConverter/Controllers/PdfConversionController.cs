@@ -14,10 +14,14 @@ namespace AppPdfConverterWApi.Controllers
     {
         private readonly ILogger<PdfConversionController> _logger;
         private readonly IPdfConversionService _pdfService;
+        private readonly IPdfConverterUtility _pdfUtility;
+        private readonly IFileService _fileService;
 
-        public PdfConversionController(IPdfConversionService pdfService, ILogger<PdfConversionController> logger)
+        public PdfConversionController(IPdfConversionService pdfService, IPdfConverterUtility pdfUtility, IFileService fileService, ILogger<PdfConversionController> logger)
         {
             _pdfService = pdfService;
+            _pdfUtility = pdfUtility;
+            _fileService = fileService;
             _logger = logger;
         }
 
@@ -90,5 +94,24 @@ namespace AppPdfConverterWApi.Controllers
                 return StatusCode(500, "An unexpected error occured.");
             }
         }
+
+        [HttpPost("createPdf")]
+        public async Task<IActionResult> CreatePdf()
+        {
+            try
+            {
+                // Read the generated PDF into a byte array.
+                byte[] pdfBytes = await _pdfService.CreateAndSavePdfAsync();
+
+                // Return the PDF file with a generated file name.
+                return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating PDF");
+                return StatusCode(500, new { message = "Error creating PDF", error = ex.Message });
+            }
+        }
+
     }
 }
