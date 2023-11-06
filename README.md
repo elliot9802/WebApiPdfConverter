@@ -13,9 +13,8 @@
 5. [Caching](#caching)
 
 ## Översikt
-WebApiPdfConverter är en webb-API som låter användare konvertera webbplatser till PDF-filer. 
-API:n erbjuder enkla slutpunkter för att skicka en webbadress (URL) eller en HTML-fil och få tillbaka en PDF-representation.
-WebApiPdfConverter är en webb-API som tillhandahåller tjänster för att konvertera webbplatser och HTML-innehåll till PDF-filer. 
+WebApiPdfConverter är ett webb-API som tillhandahåller tjänster för att konvertera webbplatser och HTML-innehåll till PDF-filer. 
+API:t erbjuder enkla slutpunkter för att skicka en webbadress (URL) eller en HTML-fil och få tillbaka en PDF-representation.
 API:t är byggt för att generera biljetter för olika evenemang och anläggningar, som t.ex. museer och simhallar, inom ett svenskt boknings-, bidrags- och besökssystemet.
 
 ## Installation
@@ -29,7 +28,7 @@ se till att uppfylla de angivna förutsättningarna och följ sedan installation
 ### Steg-för-steg installation
 1. Klona eller ladda ner koden från git-repot.
 2. Öppna lösningen i din IDE.
-3. Återställ alla NuGet-paket om det behövs.
+3. Återställ alla NuGet-paket om det behövs. (Syncfusion.HtmlToPdfConverter.Net.Windows, Syncfusion.Pdf.Net.Core och alla saknade System/Microsoft extensions som kommer säga ifrån)
 4. Bygg projektet för att säkerställa att det inte finns några kompileringsfel.
 5. Kör API:t antingen genom att trycka på "Start" i din IDE eller genom att använda terminalen och skriva `dotnet run`.
 
@@ -57,7 +56,7 @@ Använd POST-metoden med slutpunkten /api/pdf/convertHtmlFile och skicka HTML-fi
 - **Slutpunkt:** `/api/pdf/convertHtmlFile`
 
 **Payload:** 
-En `multipart/form-data`-begäran med en filparameter `htmlFile` som innehåller HTML-filen som ska konverteras.
+En `multipart/form-data`-begäran med en filparameter `htmlFile` som innehåller HTML-filen som ska konverteras. <br/>
 **Svar:** En PDF-fil som representerar innehållet i den uppladdade HTML-filen.
 
 ### Exempel
@@ -79,7 +78,7 @@ curl -X POST "https://ApiUrl/api/pdf/convertHtmlFile" \
      -H "Content-Type: multipart/form-data" \
      --output converted.pdf
 ```
-Detta kommando kommer att skicka en förfrågan till API:t för att konvertera "https://www.example.com" till PDF och spara den som "converted.pdf".
+Detta kommando kommer att skicka en förfrågan till API:t för att konvertera inmatad fil till PDF och spara den som "converted.pdf".
 
 ### Felhantering
 WebApiPdfConverter API:et använder ett robust felhanteringssystem för att säkerställa att klienter får tydlig och användbar feedback när något går fel under konverteringsprocessen. 
