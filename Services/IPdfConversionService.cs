@@ -9,7 +9,5 @@
         string GetTemporaryPdfFilePath();
         Task <byte[]> ConvertHtmlContentToPdfBytesAsync(string htmlContent);
         Task <byte[]> ConvertUrlToPdfBytesAsync(string url);
-        Task<byte[]> CreateAndSavePdfAsync();
-
     }
 }

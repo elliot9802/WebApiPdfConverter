@@ -83,10 +83,5 @@ namespace Services
             return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.ConvertUrlToPdfAsync(url, outputPath));
             /*});*/
         }
-
-        public async Task<byte[]> CreateAndSavePdfAsync()
-        {
-            return await ConvertToPdfBytesAsync(outputPath => _pdfUtility.CreatePdfAsync(outputPath));
-        }
     }
 }

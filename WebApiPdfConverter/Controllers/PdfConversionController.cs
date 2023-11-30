@@ -74,7 +74,6 @@ namespace AppPdfConverterWApi.Controllers
                     return BadRequest("Please provide a valid HTML file.");
                 }
 
-                // Read the HTML content from the uploaded file
                 using (var reader = new StreamReader(htmlFile.OpenReadStream()))
                 {
                     var htmlContent = reader.ReadToEnd();
@@ -94,24 +93,5 @@ namespace AppPdfConverterWApi.Controllers
                 return StatusCode(500, "An unexpected error occured.");
             }
         }
-
-        [HttpPost("createPdf")]
-        public async Task<IActionResult> CreatePdf()
-        {
-            try
-            {
-                // Read the generated PDF into a byte array.
-                byte[] pdfBytes = await _pdfService.CreateAndSavePdfAsync();
-
-                // Return the PDF file with a generated file name.
-                return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error creating PDF");
-                return StatusCode(500, new { message = "Error creating PDF", error = ex.Message });
-            }
-        }
-
     }
 }

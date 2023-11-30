@@ -7,7 +7,5 @@
     {
         Task ConvertHtmlToPdfAsync(string htmlContent, string outputPath);
         Task ConvertUrlToPdfAsync(string urlContent, string outputPath);
-
-        Task CreatePdfAsync(string outputPath);
     }
 }
