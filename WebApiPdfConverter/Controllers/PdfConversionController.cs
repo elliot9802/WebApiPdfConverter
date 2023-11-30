@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
 
@@ -43,7 +42,7 @@ namespace AppPdfConverterWApi.Controllers
                 }
 
                 byte[] pdfBytes = await _pdfService.ConvertUrlToPdfBytesAsync(request.Url);
-                return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
+                return File(pdfBytes, "application/pdf", $"{Guid.NewGuid()}.pdf");
             }
             catch (PdfConversionException pce)
             {
@@ -79,7 +78,7 @@ namespace AppPdfConverterWApi.Controllers
                     var htmlContent = reader.ReadToEnd();
 
                     byte[] pdfBytes = await _pdfService.ConvertHtmlContentToPdfBytesAsync(htmlContent);
-                    return File(pdfBytes, "application/pdf", Guid.NewGuid().ToString() + ".pdf");
+                    return File(pdfBytes, "application/pdf", $"{Guid.NewGuid()}.pdf");
                 }
             }
             catch (PdfConversionException pce)
