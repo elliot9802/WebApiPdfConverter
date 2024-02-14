@@ -9,9 +9,10 @@
    - [Konvertera URL till PDF](#konvertera-url-till-pdf)
    - [Konvertera HTML till PDF](#konvertera-html-fil-till-pdf)
    - [Exempel](#exempel)
+<!--
 4. [Felhantering](#felhantering)
 5. [Caching](#caching)
-
+-->
 ## Översikt
 WebApiPdfConverter är ett webb-API som tillhandahåller tjänster för att konvertera webbplatser och HTML-innehåll till PDF-filer. 
 API:t erbjuder enkla slutpunkter för att skicka en webbadress (URL) eller en HTML-fil och få tillbaka en PDF-representation.
@@ -79,7 +80,7 @@ curl -X POST "https://ApiUrl/api/pdf/convertHtmlFile" \
      --output converted.pdf
 ```
 Detta kommando kommer att skicka en förfrågan till API:t för att konvertera inmatad fil till PDF och spara den som "converted.pdf".
-
+<!-- 
 ### Felhantering
 WebApiPdfConverter API:et använder ett robust felhanteringssystem för att säkerställa att klienter får tydlig och användbar feedback när något går fel under konverteringsprocessen. 
 Felhantering i API:et innefattar flera nivåer av kontroller och svar som hjälper till att diagnostisera och lösa problem effektivt.
@@ -117,4 +118,4 @@ Genom att följa dessa riktlinjer kan klienter skapa en mer robust och tillförl
 API:t implementerar caching för att effektivisera omvandlingen av återkommande data. 
 Caching används för att minska belastningen och förbättra responsiviteten. Cachingstrategin innebär att data lagras i en timme för att snabbt kunna leverera PDF:er med data som ofta begärs.
 
-För detaljerad information om API-anrop, felkoder och exempel, se de specifika avsnitten ovan.
+För detaljerad information om API-anrop, felkoder och exempel, se de specifika avsnitten ovan. -->
